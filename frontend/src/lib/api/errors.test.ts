@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { extractErrorMessage } from './errors';
+import { extractErrorMessage, readApiError } from './errors';
 
 describe('extractErrorMessage', () => {
   it('reads a string error body', () => {
@@ -19,6 +19,19 @@ describe('extractErrorMessage', () => {
 
   it('reads a nested message string', () => {
     expect(extractErrorMessage({ message: 'No autorizado' }, 'fallback')).toBe('No autorizado');
+  });
+
+  it('reads the global exception filter body', () => {
+    expect(
+      readApiError(
+        {
+          statusCode: 409,
+          path: '/api/v1/licenses/assign',
+          error: { message: 'Este empleado ya tiene una licencia activa.', statusCode: 409 },
+        },
+        'fallback',
+      ),
+    ).toBe('Este empleado ya tiene una licencia activa.');
   });
 
   it('falls back when the payload has no message', () => {

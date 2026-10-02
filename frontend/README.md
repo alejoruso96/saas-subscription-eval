@@ -1,4 +1,4 @@
-# Frontend — Meridiano
+# Frontend
 
 Consola Next.js para administradores de cuentas corporativas. Muestra el consumo de la API y permite asignar licencias dentro del cupo contratado.
 
@@ -31,9 +31,9 @@ Abre [http://localhost:3001](http://localhost:3001).
 
 ### Modos de API
 
-`NEXT_PUBLIC_API_MODE=mock` (valor por defecto) usa datos de demostración para poder revisar la interfaz mientras los módulos del backend siguen vacíos.
+Por defecto la consola llama a `NEXT_PUBLIC_API_URL` (`http://localhost:3000/api/v1`) con `Authorization: Bearer`. El backend tiene que estar en marcha y con la base sembrada.
 
-`NEXT_PUBLIC_API_MODE=live` llama a `NEXT_PUBLIC_API_URL` (por defecto `http://localhost:3000/api/v1`) con `Authorization: Bearer`.
+`NEXT_PUBLIC_API_MODE=mock` vuelve a los datos locales, sin API.
 
 Cuentas del modo demostración:
 

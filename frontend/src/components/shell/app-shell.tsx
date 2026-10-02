@@ -29,7 +29,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         className={`fixed inset-y-0 left-0 z-30 flex w-60 flex-col bg-ink px-5 py-6 text-paper transition lg:static lg:w-auto ${open ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
       >
         <div>
-          <p className="font-serif text-2xl tracking-tight">Meridiano</p>
           <p className="mt-1 text-xs uppercase tracking-[0.16em] text-paper/60">Licencias B2B</p>
         </div>
         <nav className="mt-10 flex flex-col gap-1" aria-label="Principal">

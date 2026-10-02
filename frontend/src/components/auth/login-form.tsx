@@ -4,7 +4,6 @@ import { useAuthHydrated } from '@/components/auth/use-auth-hydrated';
 import { Button } from '@/components/ui/button';
 import { ApiError } from '@/lib/api/errors';
 import { login } from '@/lib/api/client';
-import { apiMode } from '@/lib/config';
 import { useAuthStore } from '@/stores/auth-store';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -14,8 +13,8 @@ export function LoginForm() {
   const hydrated = useAuthHydrated();
   const user = useAuthStore((state) => state.user);
   const setSession = useAuthStore((state) => state.setSession);
-  const [email, setEmail] = useState(apiMode === 'mock' ? 'admin@andeslogistica.com' : '');
-  const [password, setPassword] = useState(apiMode === 'mock' ? 'Admin123!' : '');
+  const [email, setEmail] = useState('admin@andeslogistica.com');
+  const [password, setPassword] = useState('Admin123!');
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
@@ -76,13 +75,11 @@ export function LoginForm() {
       <Button type="submit" disabled={pending} className="w-full">
         {pending ? 'Ingresando…' : 'Entrar'}
       </Button>
-      {apiMode === 'mock' ? (
-        <div className="rounded-2xl border border-line bg-card px-4 py-3 text-xs leading-5 text-muted">
-          <p className="font-medium text-foreground">Cuentas de demostración</p>
-          <p>Admin: admin@andeslogistica.com / Admin123!</p>
-          <p>Usuario: analista@andeslogistica.com / User123!</p>
-        </div>
-      ) : null}
+      <div className="rounded-2xl border border-line bg-card px-4 py-3 text-xs leading-5 text-muted">
+        <p className="font-medium text-foreground">Cuentas cargadas en la API</p>
+        <p>Admin: admin@andeslogistica.com / Admin123!</p>
+        <p>Usuario: analista@andeslogistica.com / User123!</p>
+      </div>
     </form>
   );
 }

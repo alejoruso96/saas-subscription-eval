@@ -9,7 +9,6 @@ export default function LoginPage() {
   return (
     <div className="grid min-h-full lg:grid-cols-2">
       <section className="flex flex-col justify-between bg-ink px-8 py-10 text-paper lg:px-12">
-        <p className="font-serif text-3xl">Meridiano</p>
         <div className="max-w-md py-12">
           <h1 className="font-serif text-5xl leading-tight tracking-tight">
             Licencias y consumo, en el mismo tablero.

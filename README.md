@@ -6,7 +6,7 @@ Módulo para que un administrador de una cuenta corporativa asigne licencias a s
 
 El repositorio está dividido en `backend/` y `frontend/`.
 
-- **Backend:** NestJS con TypeScript. Prefijo `/api`, versionado URI (`/api/v1`), validación global de entrada y un filtro de excepciones único. PostgreSQL con TypeORM. Los módulos de dominio (`auth`, `users`, `companies`, `licenses`, `usage`) están creados; la lógica de negocio se implementa sobre esa base.
+- **Backend:** NestJS con TypeScript. Prefijo `/api`, versionado URI (`/api/v1`), validación global de entrada y un filtro de excepciones único. PostgreSQL con TypeORM. Los módulos `auth`, `users`, `companies`, `licenses` y `usage` exponen login JWT, consumo, directorio y asignación de licencias.
 - **Frontend:** Next.js (App Router), TypeScript y Tailwind CSS. La sesión JWT vive en Zustand. El estado de servidor (consumo y directorio) se pide a la API y no se duplica en el store. El gráfico de Recharts y el diálogo de asignación se cargan con `next/dynamic`. Las filas de la tabla están memoizadas.
 - **Base de datos:** PostgreSQL, prevista para correr en Docker. Todavía no hay `docker-compose.yml`; el backend lee la conexión desde variables de entorno.
 
@@ -23,7 +23,7 @@ npm install
 npm run dev
 ```
 
-Consola en [http://localhost:3001](http://localhost:3001). Con `NEXT_PUBLIC_API_MODE=mock` no hace falta el backend. El detalle está en [frontend/README.md](frontend/README.md).
+Consola en [http://localhost:3001](http://localhost:3001). Habla con la API de `http://localhost:3000/api/v1`. `NEXT_PUBLIC_API_MODE=mock` deja la consola en datos locales. El detalle está en [frontend/README.md](frontend/README.md).
 
 ### Backend
 
@@ -42,5 +42,5 @@ API en [http://localhost:3000/api/v1](http://localhost:3000/api/v1). Salud: `GET
 - El consumo “en tiempo real” se resuelve consultando `GET /api/v1/usage` cada 15 segundos mientras la pestaña está visible. No hay WebSocket en esta versión.
 - La alerta aparece al 80% del límite y cambia de tono al superarlo. El umbral viaja en la respuesta de uso (`alertThreshold`).
 - `POST /api/v1/licenses/assign` recibe `{ userId }` y el backend rechaza la operación si el empleado ya tiene licencia o si la empresa llegó al cupo.
-- Mientras los endpoints de negocio no existan, el frontend arranca en modo demostración. Pasar a la API real es cambiar `NEXT_PUBLIC_API_MODE` a `live`.
+- El frontend usa la API real. `NEXT_PUBLIC_API_MODE=mock` conserva el modo local.
 - El token se guarda en `sessionStorage`. La protección de rutas es en el cliente. Cuando el backend emita cookies `httpOnly`, esta pieza se sustituye.
