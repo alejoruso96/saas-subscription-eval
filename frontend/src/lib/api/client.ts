@@ -5,7 +5,7 @@ import type {
   Employee,
   UsageSnapshot,
 } from '@/types/domain';
-import { ApiError, extractErrorMessage } from './errors';
+import { ApiError, readApiError } from './errors';
 import { mockAssignLicense, mockGetUsage, mockListUsers, mockLogin } from './mock';
 
 type RequestOptions = {
@@ -19,19 +19,23 @@ async function apiFetch<T>(path: string, options: RequestOptions = {}): Promise<
   if (options.body !== undefined) headers.set('Content-Type', 'application/json');
   if (options.token) headers.set('Authorization', `Bearer ${options.token}`);
 
-  const response = await fetch(`${apiBaseUrl}${path}`, {
-    method: options.method ?? 'GET',
-    headers,
-    body: options.body !== undefined ? JSON.stringify(options.body) : undefined,
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${apiBaseUrl}${path}`, {
+      method: options.method ?? 'GET',
+      headers,
+      body: options.body !== undefined ? JSON.stringify(options.body) : undefined,
+    });
+  } catch {
+    throw new ApiError(0, 'No se pudo conectar con la API. Comprueba que el backend esté en marcha.');
+  }
 
   if (!response.ok) {
     const payload = await response.json().catch(() => null);
-    const message = extractErrorMessage(
-      payload && typeof payload === 'object' && 'error' in payload ? payload.error : payload,
-      'No se pudo completar la solicitud.',
+    throw new ApiError(
+      response.status,
+      readApiError(payload, 'No se pudo completar la solicitud.'),
     );
-    throw new ApiError(response.status, message);
   }
 
   if (response.status === 204) return undefined as T;

@@ -43,18 +43,26 @@ export function useEmployees() {
   const assign = useCallback(
     async (userId: string) => {
       if (!token) return;
-      const result = await assignLicense(token, userId);
-      setEmployees((current) =>
-        current.map((employee) =>
-          employee.id === userId
-            ? { ...employee, licenseStatus: 'active', assignedAt: result.assignedAt }
-            : employee,
-        ),
-      );
-      const name = employees.find((employee) => employee.id === userId)?.name ?? 'el empleado';
-      setNotice(`Licencia asignada a ${name}.`);
+      try {
+        const result = await assignLicense(token, userId);
+        setEmployees((current) =>
+          current.map((employee) =>
+            employee.id === userId
+              ? { ...employee, licenseStatus: 'active', assignedAt: result.assignedAt }
+              : employee,
+          ),
+        );
+        const name = employees.find((employee) => employee.id === userId)?.name ?? 'el empleado';
+        setNotice(`Licencia asignada a ${name}.`);
+      } catch (caught) {
+        if (caught instanceof ApiError && caught.statusCode === 401) {
+          clear();
+          router.replace('/login');
+        }
+        throw caught;
+      }
     },
-    [employees, token],
+    [clear, employees, router, token],
   );
 
   return { employees, error, loading, notice, reload: load, assign };
