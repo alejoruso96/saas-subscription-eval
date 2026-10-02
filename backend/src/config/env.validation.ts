@@ -61,6 +61,7 @@ export function validateEnv(
 ): EnvironmentVariables {
   const validated = plainToInstance(EnvironmentVariables, config, {
     enableImplicitConversion: true,
+    exposeDefaultValues: true,
   });
 
   const errors = validateSync(validated, {
