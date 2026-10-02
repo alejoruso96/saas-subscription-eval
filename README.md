@@ -16,7 +16,7 @@ El repositorio está dividido en `backend/` y `frontend/`.
 docker compose up --build
 ```
 
-- Consola: [http://localhost:3001](http://localhost:3001)
+- Frontend: [http://localhost:3001](http://localhost:3001)
 - API: [http://localhost:3000/api/v1](http://localhost:3000/api/v1)
 - PostgreSQL: `localhost:5432`, usuario `saas`, clave `saas`, base `saas_subscriptions`
 
@@ -40,7 +40,7 @@ npm install
 npm run dev
 ```
 
-Consola en [http://localhost:3001](http://localhost:3001). Habla con la API de `http://localhost:3000/api/v1`. `NEXT_PUBLIC_API_MODE=mock` deja la consola en datos locales. El detalle está en [frontend/README.md](frontend/README.md).
+Frontend en [http://localhost:3001](http://localhost:3001). Habla con la API de `http://localhost:3000/api/v1`. `NEXT_PUBLIC_API_MODE=mock` deja la consola en datos locales. El detalle está en [frontend/README.md](frontend/README.md).
 
 #### Backend
 
@@ -52,12 +52,3 @@ npm run start:dev
 ```
 
 API en [http://localhost:3000/api/v1](http://localhost:3000/api/v1). Salud: `GET /api/v1/health`.
-
-## Supuestos
-
-- Hay dos roles, `Admin` y `User`. Solo `Admin` asigna licencias. `User` consulta el consumo y el directorio.
-- El consumo “en tiempo real” se resuelve consultando `GET /api/v1/usage` cada 15 segundos mientras la pestaña está visible. No hay WebSocket en esta versión.
-- La alerta aparece al 80% del límite y cambia de tono al superarlo. El umbral viaja en la respuesta de uso (`alertThreshold`).
-- `POST /api/v1/licenses/assign` recibe `{ userId }` y el backend rechaza la operación si el empleado ya tiene licencia o si la empresa llegó al cupo.
-- El frontend usa la API real. `NEXT_PUBLIC_API_MODE=mock` conserva el modo local.
-- El token se guarda en `sessionStorage`. La protección de rutas es en el cliente. Cuando el backend emita cookies `httpOnly`, esta pieza se sustituye.
